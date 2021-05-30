@@ -106,4 +106,4 @@ ELAPSED_TIME=$(($SECONDS - $START_TIME))
 echo "Duration: $(($ELAPSED_TIME/60)) min $(($ELAPSED_TIME%60)) sec"
 
 sleep 60
-watch krugercoin-cli getinfo
+watch krugercoin-cli getblockcount
