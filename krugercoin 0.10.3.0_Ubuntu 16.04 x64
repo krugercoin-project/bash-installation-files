@@ -90,18 +90,13 @@ addnode=102.165.224.64
 connect=45.32.163.218
 
 # server=1 tells Krugercoin-Qt and krugercoind to accept JSON-RPC commands
+# it is also read by krugercoind to determine if RPC should be enabled 
 server=1
 
 # On client-side, you add the normal user/password pair to send commands:
 rpcuser=$(uuidgen)
 rpcpassword=$(uuidgen)
 
-
-# it is also read by krugercoind to determine if RPC should be enabled 
-rpcallowip=127.0.0.1
-
-# Listen for RPC connections on this TCP port:
-rpcport=8772
 " > ~/.krugercoin/krugercoin.conf
 
 krugercoind -server -daemon
@@ -111,4 +106,4 @@ ELAPSED_TIME=$(($SECONDS - $START_TIME))
 echo "Duration: $(($ELAPSED_TIME/60)) min $(($ELAPSED_TIME%60)) sec"
 
 sleep 60
-watch krugercoincoin-cli getinfo
+watch krugercoin-cli getinfo
