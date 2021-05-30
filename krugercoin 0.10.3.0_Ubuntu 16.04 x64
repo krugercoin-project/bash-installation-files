@@ -73,6 +73,37 @@ chmod +x share/genbuild.sh
 make
 make install
 
+mkdir -p ~/.krugercoin
+touch ~/.krugercoin/krugercoin.conf
+echo "##
+## krugercoin.conf configuration file. Lines beginning with # are comments.
+##
+
+# Use as many addnode= settings as you like to connect to specific peers
+addnode=89.185.100.225
+addnode=91.206.16.214
+addnode=85.19.25.38
+addnode=46.101.235.143
+addnode=102.165.224.64
+
+# Alternatively use as many connect= settings as you like to connect ONLY to specific peers
+connect=45.32.163.218
+
+# server=1 tells Krugercoin-Qt and krugercoind to accept JSON-RPC commands
+server=1
+
+# On client-side, you add the normal user/password pair to send commands:
+rpcuser=$(uuidgen)
+rpcpassword=$(uuidgen)
+
+
+# it is also read by krugercoind to determine if RPC should be enabled 
+rpcallowip=127.0.0.1
+
+# Listen for RPC connections on this TCP port:
+rpcport=8772
+" > ~/.krugercoin/krugercoin.conf
+
 krugercoind -server -daemon
 
 # Stop timer
