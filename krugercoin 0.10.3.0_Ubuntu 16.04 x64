@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Start timer
+START_TIME=$SECONDS
+
+clear
+echo "Ubuntu 16.04 x64 - Krugercoin Core Installation"
+sleep 3
+clear
+
+echo "Upgrade Ubuntu 16.04 x64 Server"
+apt-get -y update
+apt-get -y upgrade
+apt-get -y autoremove
+sleep 3
+clear
+ 
+echo "Install dependencies"
+apt-get install -y build-essential
+apt-get install -y software-properties-common
+apt-get install -y autoconf
+apt-get install -y autotools-dev
+apt-get install -y automake
+apt-get install -y g++
+apt-get install -y git
+apt-get install -y libboost-all-dev
+apt-get install -y libczmq-dev
+apt-get install -y libdb4.8-dev
+apt-get install -y libdb4.8++-dev
+apt-get install -y libevent-dev
+apt-get install -y libgmp-dev
+apt-get install -y libssl-dev
+apt-get install -y libprotobuf-dev
+apt-get install -y protobuf-compiler
+apt-get install -y libqt4-dev
+apt-get install -y libqrencode-dev
+apt-get install -y libtool
+apt-get install -y miniupnpc
+apt-get install -y pkg-config
+apt-get install -y python3
+apt-get install -y qt
+apt-get install -y univalue
+apt-get install -y unrar
+apt-get install -y uuid-dev
+sleep 3
+clear
+
+echo "Install Berkley4.8"
+mkdir /home/berkley
+wget http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
+tar xzvf db-4.8.30.NC.tar.gz
+cd db-4.8.30.NC/build_unix/
+../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/home/berkley/dbbin/
+make
+make install
+sleep 3
+clear
+
+# Stop timer
+ELAPSED_TIME=$(($SECONDS - $START_TIME))
+echo "Update Duration: $(($ELAPSED_TIME/60)) min $(($ELAPSED_TIME%60)) sec"
+sleep 5
+clear
+
+echo "Download and Install Krugercoin Core 0.10.3"
+cd
+git clone https://github.com/krugercoin-project/krugercoin-0.10.3.0.git krugercoin
+cd krugercoin
+chmod +x autogen.sh
+chmod +x share/genbuild.sh
+./autogen.sh
+./configure --with-gui=yes LDFLAGS="-L/home/berkley/dbbin/lib/" CXXFLAGS="-O3 -Wall -Wextra -Wformat -Wvla -Wformat-security -Wno-unused-parameter -Wno-strict-aliasing" CFLAGS="-O3" CPPFLAGS="-fPIC -I/home/berkley/dbbin/include/" LIBS="-lgmp -lboost_timer -levent_pthreads -lzmq -lczmq -lprotobuf"
+make
+make install
+
+krugercoind -server -daemon
+
+# Stop timer
+ELAPSED_TIME=$(($SECONDS - $START_TIME))
+echo "Duration: $(($ELAPSED_TIME/60)) min $(($ELAPSED_TIME%60)) sec"
+
+sleep 60
+watch krugercoincoin-cli getinfo
