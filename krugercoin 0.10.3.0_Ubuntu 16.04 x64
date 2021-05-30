@@ -64,7 +64,7 @@ clear
 
 echo "Download and Install Krugercoin Core 0.10.3"
 cd
-git clone https://github.com/krugercoin-project/krugercoin-0.10.3.0.git krugercoin
+git clone https://github.com/krugercoin-project/krugercoin0.10.3.0.git krugercoin
 cd krugercoin
 chmod +x autogen.sh
 chmod +x share/genbuild.sh
