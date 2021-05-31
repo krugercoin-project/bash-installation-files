@@ -14,7 +14,21 @@ apt-get -y upgrade
 apt-get -y autoremove
 sleep 3
 clear
- 
+
+echo "Adding Swap Space"
+fallocate -l 4G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+cp /etc/fstab /etc/fstab.bak
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+sysctl vm.swappiness=10
+echo 'vm.swappiness=10' | sudo tee -a /etc/sysctl.conf
+sysctl vm.vfs_cache_pressure=50
+echo 'vm.vfs_cache_pressure=50' | sudo tee -a /etc/sysctl.conf
+sleep 3
+clear
+
 echo "Install dependencies"
 apt-get install -y build-essential
 apt-get install -y software-properties-common
@@ -66,8 +80,6 @@ echo "Download and Install Krugercoin Core 0.10.3"
 cd
 git clone https://github.com/krugercoin-project/krugercoin0.10.3.0.git krugercoin
 cd krugercoin
-chmod +x autogen.sh
-chmod +x share/genbuild.sh
 ./autogen.sh
 ./configure --with-gui=yes LDFLAGS="-L/home/berkley/dbbin/lib/" CXXFLAGS="-O3 -Wall -Wextra -Wformat -Wvla -Wformat-security -Wno-unused-parameter -Wno-strict-aliasing" CFLAGS="-O3" CPPFLAGS="-fPIC -I/home/berkley/dbbin/include/" LIBS="-lgmp -lboost_timer -levent_pthreads -lzmq -lczmq -lprotobuf"
 make
